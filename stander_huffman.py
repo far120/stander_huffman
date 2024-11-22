@@ -7,6 +7,7 @@ class StandardHuffman:
                 self.frequency[char] += 1
             else:
                 self.frequency[char] = 1
+        print(self.frequency)
         self.mean_frequency()
         self.Compresion() 
         
@@ -18,35 +19,43 @@ class StandardHuffman:
             
     def Compresion(self):
         arr = []
+        #  add the frequency to the array 
         for char, weight in self.frequency.items():
                 arr.append([weight, [char, ""]])
        
+    #    implement standard huffman algorithm
+       
         while len(arr) > 1:
             arr.sort() 
-            l1 = arr.pop(0)  
-            l2 = arr.pop(0)  
+            print(arr)
+            l1 = arr.pop(0)  # sotre and delete first element in array
+            l2 = arr.pop(0)  # sotre and delete first element in array after delete first element
+          
     
             for part in l1[1:]:
-                part[1] = '0' + part[1]
+                part[1] = '1' + part[1] # add bit from left to right 
                 
             for part in l2[1:]:
-                part[1] = '1' + part[1]
+                part[1] = '0' + part[1] # add bit from left to right 
             
-            arr.append([l1[0] + l2[0]] + l1[1:] + l2[1:])
-            
+            arr.append([l1[0] + l2[0]] + l1[1:] + l2[1:]) # add frequncy and each element after add opretion
+           
     
-        self.huffman_tree = arr[0][1:] 
-        print("Huffman tree:", self.huffman_tree)
-        
+        # to print each element is bits 
         self.huffman_codes = {}
-        for char, bit_string in arr[0][1:]:
-            self.huffman_codes[char] = bit_string
-        self.huffman_codes = self.huffman_codes    
+        for char, bit in arr[0][1:]:
+            self.huffman_codes[char] = bit
+        self.huffman_codes = self.huffman_codes 
+        print("Huffman codes:", self.huffman_codes)  
+        
+        # to print compressed data 
         compressed_data = ""
         for char in self.data:
             compressed_data += self.huffman_codes[char]
         print("Compressed data: ", compressed_data)
         
+        
+        self.huffman_tree = arr[0][1:] 
         self.Decompresion(compressed_data)
         self.compressed_data = compressed_data
      
@@ -80,6 +89,10 @@ def main():
    # add decompresed data to file
     with open("D:\ملفات\G3 t1 cs\datacomprasion\stander_huffman/decompressed.txt", "w") as file:
         file.write(huffman.decoded_text)
+        
+    with open("D:\ملفات\G3 t1 cs\datacomprasion\stander_huffman/Huffmancode.txt", "w" ) as file:
+        file.write(str(huffman.huffman_codes))
+        
 
 
 main()
